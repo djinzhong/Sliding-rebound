@@ -58,6 +58,7 @@
 				<li>视频</li>
 			</ul>
 		</nav>
+		<p id="text"></p>
 		<script type="text/javascript">
 			var nav = document.querySelector('#nav');
 			var list = nav.children[0];
@@ -70,15 +71,14 @@
 			var maxRightSlide = -(list.offsetWidth - nav.offsetWidth + maxLeftSlide);
 			list.addEventListener('touchstart', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true,
-				
+				e.preventDefault()
 				list.style.transition = 'none'
 				startX = e.changedTouches[0].clientX;
 			})
 			
 			list.addEventListener('touchmove', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
+				e.preventDefault()
 				
 				var dx = e.changedTouches[0].clientX - startX;
 				var tempX = centerX + dx
@@ -94,7 +94,7 @@
 			
 			list.addEventListener('touchend', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
+				e.preventDefault()
 				
 				var dx = e.changedTouches[0].clientX - startX;
 				centerX = centerX + dx;
@@ -103,14 +103,16 @@
 				} else if (centerX < maxRightSlide) {
 					centerX = maxRightSlide;
 				}
+        
+				if(dx === 0) {
+          var text = document.querySelector('#text')
+					text.innerHTML = e.target.innerHTML
+				}
 				list.style.transition = 'transfrom .5s'
 				list.style.transform = 'translateX('+centerX+'px)'
 				// ul.style.transform = `translateY(${centerY}px)`
 			})
-			
-			newList.addEventListener('click', function(e) {
-				console.log(e)
-			})
+		
 		</script>
 	</body>
 </html>

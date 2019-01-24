@@ -10,7 +10,9 @@
 				margin: 0;
 				padding: 0;
 			}
-
+      html,body {
+				height: 100%;
+			}
 			#nav {
 				width: 100%;
 				height: 300px;
@@ -20,7 +22,6 @@
 				top: 50%;
 				transform: translate(-50%, -50%)
 			}
-
 			.list {
 				padding: 50px 0;
 				background: #1062ac;
@@ -36,6 +37,7 @@
 		</style>
 	</head>
 	<body>
+		<p id="text"></p>
 		<nav id="nav">
 			<ul class="list">
 				<li class="newList">最新</li>
@@ -64,18 +66,17 @@
 			var maxBottom = -(list.offsetHeight - nav.offsetHeight + maxTop);
 			var maxTopSlide = -50;
 			var maxBottomSlide = -(list.offsetHeight - nav.offsetHeight + maxTopSlide);
+
 			list.addEventListener('touchstart', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true,
-
+        e.preventDefault()
 				list.style.transition = 'none'
 				startY = e.changedTouches[0].clientY;
 			})
 
 			list.addEventListener('touchmove', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
-
+				e.preventDefault()
 				var dy = e.changedTouches[0].clientY - startY;
 				var tempY = centerY + dy
 
@@ -90,8 +91,7 @@
 
 			list.addEventListener('touchend', function(e) {
 				e = e || window.event
-				e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
-
+				e.preventDefault()
 				var dy = e.changedTouches[0].clientY - startY;
 				centerY = centerY + dy;
 				if (centerY > maxTopSlide) {
@@ -99,14 +99,15 @@
 				} else if (centerY < maxBottomSlide) {
 					centerY = maxBottomSlide;
 				}
+        var text = document.querySelector('#text');
+				if(dy === 0) {
+          text.innerHTML = e.target.innerHTML
+				}
 				list.style.transition = 'transfrom .5s'
 				list.style.transform = 'translateY(' + centerY + 'px)'
 				// ul.style.transform = `translateY(${centerY}px)`
 			})
 
-			newList.addEventListener('click', function(e) {
-				console.log(e)
-			})
 		</script>
 	</body>
 </html>
